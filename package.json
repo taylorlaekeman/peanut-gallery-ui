@@ -1,0 +1,29 @@
+{
+  "name": "peanut-gallery-ui",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "next build",
+    "check": "npm run format:check && npm run lint && npm run build",
+    "dev": "next dev",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "lint": "next lint",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "14.1.0",
+    "react": "^18",
+    "react-dom": "^18"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.1.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "3.2.4",
+    "typescript": "^5"
+  }
+}
