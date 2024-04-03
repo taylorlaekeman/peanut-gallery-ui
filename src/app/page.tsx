@@ -1,95 +1,122 @@
-import Image from 'next/image';
+'use client';
+import { gql, useMutation, useQuery } from '@apollo/client';
+import clsx from 'clsx';
+import { DateTime } from 'luxon';
+
 import styles from './page.module.css';
 
-export default function Home() {
+function PeanutGallery() {
+  const moviesData = useQuery<{ movies: PaginatedResult<Movie> }>(MOVIES_QUERY);
+  const [populateMovies] = useMutation<{ status: number }>(
+    POPULATE_MOVIES_MUTATION,
+  );
+  if (moviesData.loading)
+    return (
+      <main className={styles.main}>
+        <p>loading</p>
+      </main>
+    );
+  if (moviesData.error)
+    return (
+      <main className={styles.main}>
+        <p>error {moviesData.error.message}</p>
+      </main>
+    );
   return (
     <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+      <button
+        onClick={() => {
+          populateMovies();
+        }}
+      >
+        update
+      </button>
+      <h1>Recent Releases</h1>
+      <section className={styles.movies}>
+        {moviesData?.data?.movies?.results.map((movie) => (
+          <Movie key={movie.id} movie={movie} />
+        ))}
+      </section>
     </main>
   );
 }
+
+interface PaginatedResult<Type> {
+  page: number;
+  results: Type[];
+  totalPages: number;
+}
+
+interface Movie {
+  id: string;
+  popularity: number;
+  releaseDate: string;
+  reviewCount: number;
+  score: number;
+  title: string;
+}
+
+const MOVIES_QUERY = gql`
+  #graphql
+  query GetMovies {
+    movies {
+      page
+      results {
+        id
+        releaseDate
+        reviewCount
+        score
+        title
+      }
+      totalPages
+    }
+  }
+`;
+
+const POPULATE_MOVIES_MUTATION = gql`
+  #graphql
+  mutation PopulateMovies($endDate: String, $startDate: String) {
+    populateMovies(endDate: $endDate, startDate: $startDate) {
+      status
+    }
+  }
+`;
+
+function Movie({ movie }: { movie: Movie }): React.ReactNode {
+  return (
+    <>
+      <p
+        className={clsx({
+          [styles.score]: true,
+          [styles.high]: movie.score >= SCORE_THRESHOLDS.high,
+          [styles.mid]:
+            movie.score >= SCORE_THRESHOLDS.mid &&
+            movie.score < SCORE_THRESHOLDS.high,
+          [styles.low]: movie.score < SCORE_THRESHOLDS.mid,
+        })}
+      >
+        {(movie.score * 10).toFixed(1)}
+      </p>
+      <div>
+        <a
+          className={styles.title}
+          href={`https://www.themoviedb.org/movie/${movie.id}`}
+        >
+          {movie.title}
+        </a>
+        <p>
+          {DateTime.fromISO(movie.releaseDate).toLocaleString(
+            DateTime.DATE_MED,
+          )}
+        </p>
+      </div>
+    </>
+  );
+}
+
+const SCORE_THRESHOLDS = {
+  high: 0.7,
+  mid: 0.6,
+};
+
+export default PeanutGallery;
