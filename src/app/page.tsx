@@ -6,31 +6,32 @@ import { DateTime } from 'luxon';
 import styles from './page.module.css';
 
 function PeanutGallery() {
-  const moviesData = useQuery<{ movies: PaginatedResult<Movie> }>(MOVIES_QUERY);
-  const [populateMovies] = useMutation<{ status: number }>(
-    POPULATE_MOVIES_MUTATION,
+  return (
+    <main className={styles.main}>
+      <PopulateDatabase />
+      <RecentReleases />
+    </main>
   );
+}
+
+function RecentReleases() {
+  const moviesData = useQuery<{ movies: PaginatedResult<Movie> }>(MOVIES_QUERY);
   if (moviesData.loading)
     return (
       <main className={styles.main}>
+        <h1>Recent Releases</h1>
         <p>loading</p>
       </main>
     );
   if (moviesData.error)
     return (
       <main className={styles.main}>
+        <h1>Recent Releases</h1>
         <p>error {moviesData.error.message}</p>
       </main>
     );
   return (
     <main className={styles.main}>
-      <button
-        onClick={() => {
-          populateMovies();
-        }}
-      >
-        update
-      </button>
       <h1>Recent Releases</h1>
       <section className={styles.movies}>
         {moviesData?.data?.movies?.results.map((movie) => (
@@ -38,6 +39,21 @@ function PeanutGallery() {
         ))}
       </section>
     </main>
+  );
+}
+
+function PopulateDatabase() {
+  const [populateMovies] = useMutation<{ status: number }>(
+    POPULATE_MOVIES_MUTATION,
+  );
+  return (
+    <button
+      onClick={() => {
+        populateMovies();
+      }}
+    >
+      populate database
+    </button>
   );
 }
 

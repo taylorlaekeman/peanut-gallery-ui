@@ -1,9 +1,8 @@
-'use client';
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 
+import { Providers } from './Providers';
 import './globals.css';
-import { env } from './env';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -21,18 +20,6 @@ export default function RootLayout({
   );
 }
 
-function Providers({
-  children,
-}: Readonly<{ children: React.ReactNode }>): React.ReactNode {
-  return <ApiProvider>{children}</ApiProvider>;
-}
-
-function ApiProvider({
-  children,
-}: Readonly<{ children: React.ReactNode }>): React.ReactNode {
-  const client = new ApolloClient({
-    cache: new InMemoryCache(),
-    uri: env.apiUri,
-  });
-  return <ApolloProvider client={client}>{children}</ApolloProvider>;
-}
+export const metadata: Metadata = {
+  title: 'Peanut Gallery',
+};
