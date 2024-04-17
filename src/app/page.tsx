@@ -93,7 +93,7 @@ const POPULATE_MOVIES_MUTATION = gql`
   #graphql
   mutation PopulateMovies($endDate: String, $startDate: String) {
     populateMovies(endDate: $endDate, startDate: $startDate) {
-      status
+      initiatedIds
     }
   }
 `;
