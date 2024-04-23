@@ -1,5 +1,5 @@
 'use client';
-import { gql, useMutation, useQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 import clsx from 'clsx';
 import { DateTime } from 'luxon';
 
@@ -8,7 +8,6 @@ import styles from './page.module.css';
 function PeanutGallery() {
   return (
     <main className={styles.main}>
-      <PopulateDatabase />
       <RecentReleases />
     </main>
   );
@@ -42,21 +41,6 @@ function RecentReleases() {
   );
 }
 
-function PopulateDatabase() {
-  const [populateMovies] = useMutation<{ status: number }>(
-    POPULATE_MOVIES_MUTATION,
-  );
-  return (
-    <button
-      onClick={() => {
-        populateMovies();
-      }}
-    >
-      populate database
-    </button>
-  );
-}
-
 interface PaginatedResult<Type> {
   page: number;
   results: Type[];
@@ -85,15 +69,6 @@ const MOVIES_QUERY = gql`
         title
       }
       totalPages
-    }
-  }
-`;
-
-const POPULATE_MOVIES_MUTATION = gql`
-  #graphql
-  mutation PopulateMovies($endDate: String, $startDate: String) {
-    populateMovies(endDate: $endDate, startDate: $startDate) {
-      initiatedIds
     }
   }
 `;
