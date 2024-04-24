@@ -7,8 +7,8 @@
   align-items: baseline;
   border-bottom: solid lightgrey 1px;
   display: grid;
-  grid-template-columns: 80px 1fr max-content;
-  grid-template-areas: 'poster details score';
+  grid-template-columns: max-content 80px 1fr;
+  grid-template-areas: 'score poster details';
   height: calc(120px + calc(8px * 2));
   padding: 8px 0;
 }
@@ -47,6 +47,7 @@ img.moviePoster {
 
 .scoreWrapper {
   grid-area: score;
+  margin-right: 8px;
 }
 
 .scoreBackground {
