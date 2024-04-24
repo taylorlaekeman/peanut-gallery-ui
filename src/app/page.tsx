@@ -29,12 +29,18 @@ function RecentReleases() {
         <p>error {moviesData.error.message}</p>
       </main>
     );
+  const movies = moviesData?.data?.movies?.results ?? [];
   return (
     <main className={styles.main}>
       <h1>Recent Releases</h1>
-      <section className={styles.movies}>
-        {moviesData?.data?.movies?.results.map((movie) => (
-          <Movie key={movie.id} movie={movie} />
+      <section>
+        {movies.map((movie, index) => (
+          <Movie
+            isFirst={index === 0}
+            isLast={index === movies.length - 1}
+            key={movie.id}
+            movie={movie}
+          />
         ))}
       </section>
     </main>
@@ -49,7 +55,7 @@ interface PaginatedResult<Type> {
 
 interface Movie {
   id: string;
-  popularity: number;
+  posterUrl: string;
   releaseDate: string;
   reviewCount: number;
   score: number;
@@ -63,6 +69,7 @@ const MOVIES_QUERY = gql`
       page
       results {
         id
+        posterUrl
         releaseDate
         reviewCount
         score
@@ -73,12 +80,26 @@ const MOVIES_QUERY = gql`
   }
 `;
 
-function Movie({ movie }: { movie: Movie }): React.ReactNode {
+function Movie({
+  isFirst = false,
+  isLast = false,
+  movie,
+}: {
+  isFirst?: boolean;
+  isLast?: boolean;
+  movie: Movie;
+}): React.ReactNode {
   return (
-    <>
-      <p
+    <div
+      className={clsx({
+        [styles.movie]: true,
+        [styles.firstMovie]: isFirst,
+        [styles.lastMovie]: isLast,
+      })}
+    >
+      <div
         className={clsx({
-          [styles.score]: true,
+          [styles.scoreWrapper]: true,
           [styles.high]: movie.score >= SCORE_THRESHOLDS.high,
           [styles.mid]:
             movie.score >= SCORE_THRESHOLDS.mid &&
@@ -86,22 +107,27 @@ function Movie({ movie }: { movie: Movie }): React.ReactNode {
           [styles.low]: movie.score < SCORE_THRESHOLDS.mid,
         })}
       >
-        {(movie.score * 10).toFixed(1)}
-      </p>
-      <div>
-        <a
-          className={styles.title}
-          href={`https://www.themoviedb.org/movie/${movie.id}`}
-        >
-          {movie.title}
-        </a>
-        <p>
+        <div className={styles.scoreBackground}>
+          <p className={styles.score}>{(movie.score * 100).toFixed(0)}</p>
+        </div>
+      </div>
+      {movie.posterUrl && (
+        <img
+          alt={`movie poster for '${movie.title}'`}
+          className={styles.moviePoster}
+          src={movie.posterUrl}
+        />
+      )}
+      {!movie.posterUrl && <span className={styles.missingMoviePoster} />}
+      <div className={styles.movieDetails}>
+        <p className={styles.title}>{movie.title}</p>
+        <p className={styles.releaseDate}>
           {DateTime.fromISO(movie.releaseDate).toLocaleString(
-            DateTime.DATE_MED,
+            DateTime.DATE_MED
           )}
         </p>
       </div>
-    </>
+    </div>
   );
 }
 

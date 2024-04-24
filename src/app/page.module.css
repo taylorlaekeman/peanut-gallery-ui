@@ -3,33 +3,87 @@
   padding: 16px;
 }
 
-.movies {
-  align-items: center;
+.movie {
+  align-items: baseline;
+  border-bottom: solid lightgrey 1px;
   display: grid;
-  grid-gap: 8px;
-  grid-template-columns: max-content 1fr;
+  grid-template-columns: 80px 1fr max-content;
+  grid-template-areas: 'poster details score';
+  height: calc(120px + calc(8px * 2));
+  padding: 8px 0;
+}
+
+.movie:last-child {
+  border-bottom: none;
+}
+
+.firstMovie .scoreWrapper {
+  border-top-left-radius: 10px;
+}
+
+.lastMovie .scoreWrapper {
+  border-bottom-left-radius: 10px;
+}
+
+img.moviePoster {
+  border: solid lightgrey 1px;
+  border-radius: 3px;
+  grid-area: poster;
+  height: 100%;
+}
+
+.missingMoviePoster {
+  background-color: lightgrey;
+  border: solid lightgrey 1px;
+  border-radius: 3px;
+  grid-area: poster;
+  height: 100%;
+}
+
+.movieDetails {
+  grid-area: details;
+  padding-left: 8px;
+}
+
+.scoreWrapper {
+  grid-area: score;
+}
+
+.scoreBackground {
+  border-radius: 3px;
+  display: flex;
+  width: max-content;
 }
 
 .score {
   margin: 0;
-  padding: 8px;
+  padding: 4px 8px;
 }
 
-.score.high {
+.scoreWrapper.high .scoreBackground {
   background-color: lightgreen;
   color: darkgreen;
 }
 
-.score.mid {
+.scoreWrapper.mid .scoreBackground {
   background-color: khaki;
   color: olive;
 }
 
-.score.low {
+.scoreWrapper.low .scoreBackground {
   background-color: pink;
   color: darkred;
 }
 
 .title {
+  font-size: 1.1rem;
   margin: 0;
+}
+
+.releaseDate {
+  font-size: 0.7rem;
+  letter-spacing: 0.1rem;
+  margin: 0;
+  margin-top: 8px;
+  text-transform: uppercase;
 }
