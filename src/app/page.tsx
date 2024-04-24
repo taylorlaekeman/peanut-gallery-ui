@@ -15,24 +15,25 @@ function PeanutGallery() {
 
 function RecentReleases() {
   const moviesData = useQuery<{ movies: PaginatedResult<Movie> }>(MOVIES_QUERY);
+  const title = 'Current Movies';
   if (moviesData.loading)
     return (
       <main className={styles.main}>
-        <h1>Recent Releases</h1>
+        <h1>{title}</h1>
         <p>loading</p>
       </main>
     );
   if (moviesData.error)
     return (
       <main className={styles.main}>
-        <h1>Recent Releases</h1>
+        <h1>{title}</h1>
         <p>error {moviesData.error.message}</p>
       </main>
     );
   const movies = moviesData?.data?.movies?.results ?? [];
   return (
     <main className={styles.main}>
-      <h1>Recent Releases</h1>
+      <h1>{title}</h1>
       <section>
         {movies.map((movie, index) => (
           <Movie
