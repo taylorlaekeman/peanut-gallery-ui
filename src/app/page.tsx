@@ -55,6 +55,11 @@ interface PaginatedResult<Type> {
 }
 
 interface Movie {
+  credits?: {
+    directedBy: string[];
+    starring: string[];
+    writtenBy: string[];
+  };
   id: string;
   posterUrl: string;
   releaseDate: string;
@@ -69,6 +74,11 @@ const MOVIES_QUERY = gql`
     movies {
       page
       results {
+        credits {
+          directedBy
+          starring
+          writtenBy
+        }
         id
         posterUrl
         releaseDate
@@ -122,6 +132,17 @@ function Movie({
       {!movie.posterUrl && <span className={styles.missingMoviePoster} />}
       <div className={styles.movieDetails}>
         <p className={styles.title}>{movie.title}</p>
+        {movie.credits && movie.credits.directedBy.length > 0 && (
+          <p className={styles.credits}>
+            {movie.credits.directedBy.join(', ')}
+          </p>
+        )}
+        {movie.credits && movie.credits.writtenBy.length > 0 && (
+          <p className={styles.credits}>{movie.credits.writtenBy.join(', ')}</p>
+        )}
+        {movie.credits && movie.credits.starring.length > 0 && (
+          <p className={styles.credits}>{movie.credits.starring.join(', ')}</p>
+        )}
         <p className={styles.releaseDate}>
           {DateTime.fromISO(movie.releaseDate).toLocaleString(
             DateTime.DATE_MED

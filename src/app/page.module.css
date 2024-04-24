@@ -82,6 +82,11 @@ img.moviePoster {
   margin: 0;
 }
 
+.credits {
+  font-size: 0.6rem;
+  margin: 4px 0;
+}
+
 .releaseDate {
   font-size: 0.7rem;
   letter-spacing: 0.1rem;
