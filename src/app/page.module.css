@@ -30,6 +30,7 @@ img.moviePoster {
   border-radius: 3px;
   grid-area: poster;
   height: 100%;
+  max-width: 100%;
 }
 
 .missingMoviePoster {
