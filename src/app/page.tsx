@@ -18,22 +18,27 @@ function RecentReleases() {
   const title = 'Current Movies';
   if (moviesData.loading)
     return (
-      <main className={styles.main}>
-        <h1>{title}</h1>
+      <>
+        <h1 className={styles.listTitle}>{title}</h1>
         <p>loading</p>
-      </main>
+      </>
     );
   if (moviesData.error)
     return (
-      <main className={styles.main}>
-        <h1>{title}</h1>
+      <>
+        <h1 className={styles.listTitle}>{title}</h1>
         <p>error {moviesData.error.message}</p>
-      </main>
+      </>
     );
   const movies = moviesData?.data?.movies?.results ?? [];
+  console.log(movies);
   return (
-    <main className={styles.main}>
-      <h1>{title}</h1>
+    <>
+      <h1 className={styles.listTitle}>{title}</h1>
+      <p className={styles.listSubtitle}>
+        Movies released recently or releasing soon that have been widely
+        reviewed
+      </p>
       <section>
         {movies.map((movie, index) => (
           <Movie
@@ -44,7 +49,7 @@ function RecentReleases() {
           />
         ))}
       </section>
-    </main>
+    </>
   );
 }
 
