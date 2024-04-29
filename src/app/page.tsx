@@ -233,7 +233,7 @@ function ReleaseIcon({
       return <TheaterIcon className={clsx(className, styles.releaseIcon)} />;
     case ReleaseType.Unknown:
     default:
-      return <UnknownIcon className={className} />;
+      return null;
   }
 }
 
@@ -253,12 +253,6 @@ function NetflixIcon({
   className,
 }: { className?: string } = {}): React.ReactNode {
   return <div className={clsx(styles.iconBackground, className)}>N</div>;
-}
-
-function UnknownIcon({
-  className,
-}: { className?: string } = {}): React.ReactNode {
-  return <div className={clsx(styles.iconBackground, className)}>?</div>;
 }
 
 export default PeanutGallery;
