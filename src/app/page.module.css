@@ -18,22 +18,18 @@
   align-items: baseline;
   border-bottom: solid lightgrey 1px;
   display: grid;
+  grid-gap: 0 8px;
   grid-template-columns: max-content 80px 1fr;
-  grid-template-areas: 'score poster details';
+  grid-template-areas:
+    'score poster details'
+    '. poster details'
+    'releaseType poster details';
   height: calc(120px + calc(8px * 2));
   padding: 8px 0;
 }
 
 .movie:last-child {
   border-bottom: none;
-}
-
-.firstMovie .scoreWrapper {
-  border-top-left-radius: 10px;
-}
-
-.lastMovie .scoreWrapper {
-  border-bottom-left-radius: 10px;
 }
 
 img.moviePoster {
@@ -55,36 +51,28 @@ img.moviePoster {
 .movieDetails {
   grid-area: details;
   overflow: hidden;
-  padding-left: 8px;
-}
-
-.scoreWrapper {
-  grid-area: score;
-  margin-right: 8px;
-}
-
-.scoreBackground {
-  border-radius: 3px;
-  display: flex;
-  width: max-content;
 }
 
 .score {
+  border-radius: 3px;
+  font-size: 0.8rem;
+  grid-area: score;
   margin: 0;
   padding: 4px 8px;
+  width: max-content;
 }
 
-.scoreWrapper.high .scoreBackground {
+.score.high {
   background-color: lightgreen;
   color: darkgreen;
 }
 
-.scoreWrapper.mid .scoreBackground {
+.score.mid {
   background-color: khaki;
   color: olive;
 }
 
-.scoreWrapper.low .scoreBackground {
+.score.low {
   background-color: pink;
   color: darkred;
 }
@@ -125,4 +113,22 @@ img.moviePoster {
   margin: 0;
   margin-top: 12px;
   text-transform: uppercase;
+}
+
+.releaseType {
+  grid-area: releaseType;
+}
+
+.iconBackground {
+  align-items: center;
+  border: solid black 1px;
+  border-radius: 50%;
+  display: flex;
+  height: 20px;
+  justify-content: center;
+  width: 20px;
+}
+
+.releaseIcon {
+  font-size: 0.7rem;
 }

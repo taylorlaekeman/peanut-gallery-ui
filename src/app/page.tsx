@@ -39,13 +39,8 @@ function RecentReleases() {
         reviewed
       </p>
       <section>
-        {movies.map((movie, index) => (
-          <Movie
-            isFirst={index === 0}
-            isLast={index === movies.length - 1}
-            key={movie.id}
-            movie={movie}
-          />
+        {movies.map((movie) => (
+          <Movie key={movie.id} movie={movie} />
         ))}
       </section>
     </>
@@ -104,26 +99,16 @@ const MOVIES_QUERY = gql`
   }
 `;
 
-function Movie({
-  isFirst = false,
-  isLast = false,
-  movie,
-}: {
-  isFirst?: boolean;
-  isLast?: boolean;
-  movie: Movie;
-}): React.ReactNode {
+function Movie({ movie }: { movie: Movie }): React.ReactNode {
   return (
     <div
       className={clsx({
         [styles.movie]: true,
-        [styles.firstMovie]: isFirst,
-        [styles.lastMovie]: isLast,
       })}
     >
-      <div
+      <p
         className={clsx({
-          [styles.scoreWrapper]: true,
+          [styles.score]: true,
           [styles.high]: movie.score >= SCORE_THRESHOLDS.high,
           [styles.mid]:
             movie.score >= SCORE_THRESHOLDS.mid &&
@@ -131,11 +116,12 @@ function Movie({
           [styles.low]: movie.score < SCORE_THRESHOLDS.mid,
         })}
       >
-        <div className={styles.scoreBackground}>
-          <p className={styles.score}>{(movie.score * 100).toFixed(0)}</p>
-        </div>
-      </div>
-      <ReleaseIcon releaseType={movie.releaseType} />
+        {(movie.score * 100).toFixed(0)}
+      </p>
+      <ReleaseIcon
+        className={styles.releaseType}
+        releaseType={movie.releaseType}
+      />
       {movie.posterUrl && (
         <img
           alt={`movie poster for '${movie.title}'`}
@@ -235,35 +221,44 @@ function ActorIcon(): React.ReactNode {
 }
 
 function ReleaseIcon({
+  className,
   releaseType = ReleaseType.Unknown,
-}: { releaseType?: ReleaseType } = {}): React.ReactNode {
+}: { className?: string; releaseType?: ReleaseType } = {}): React.ReactNode {
   switch (releaseType) {
     case ReleaseType.DisneyPlus:
-      return <DisneyPlusIcon />;
+      return <DisneyPlusIcon className={clsx(className, styles.releaseIcon)} />;
     case ReleaseType.Netflix:
-      return <NetflixIcon />;
+      return <NetflixIcon className={className} />;
     case ReleaseType.Theatrical:
-      return <TheaterIcon />;
+      return <TheaterIcon className={clsx(className, styles.releaseIcon)} />;
     case ReleaseType.Unknown:
     default:
-      return <UnknownIcon />;
+      return <UnknownIcon className={className} />;
   }
 }
 
-function TheaterIcon(): React.ReactNode {
-  return <span>T</span>;
+function TheaterIcon({
+  className,
+}: { className?: string } = {}): React.ReactNode {
+  return <div className={clsx(styles.iconBackground, className)}>T</div>;
 }
 
-function DisneyPlusIcon(): React.ReactNode {
-  return <span>D</span>;
+function DisneyPlusIcon({
+  className,
+}: { className?: string } = {}): React.ReactNode {
+  return <div className={clsx(styles.iconBackground, className)}>D</div>;
 }
 
-function NetflixIcon(): React.ReactNode {
-  return <span>N</span>;
+function NetflixIcon({
+  className,
+}: { className?: string } = {}): React.ReactNode {
+  return <div className={clsx(styles.iconBackground, className)}>N</div>;
 }
 
-function UnknownIcon(): React.ReactNode {
-  return <span>?</span>;
+function UnknownIcon({
+  className,
+}: { className?: string } = {}): React.ReactNode {
+  return <div className={clsx(styles.iconBackground, className)}>?</div>;
 }
 
 export default PeanutGallery;
