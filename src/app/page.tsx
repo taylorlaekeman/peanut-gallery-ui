@@ -31,7 +31,6 @@ function RecentReleases() {
       </>
     );
   const movies = moviesData?.data?.movies?.results ?? [];
-  console.log(movies);
   return (
     <>
       <h1 className={styles.listTitle}>{title}</h1>
@@ -68,9 +67,17 @@ interface Movie {
   id: string;
   posterUrl: string;
   releaseDate: string;
+  releaseType: ReleaseType;
   reviewCount: number;
   score: number;
   title: string;
+}
+
+enum ReleaseType {
+  DisneyPlus = 'disney-plus',
+  Netflix = 'netflix',
+  Theatrical = 'theatrical',
+  Unknown = 'unknown',
 }
 
 const MOVIES_QUERY = gql`
@@ -87,6 +94,7 @@ const MOVIES_QUERY = gql`
         id
         posterUrl
         releaseDate
+        releaseType
         reviewCount
         score
         title
@@ -127,6 +135,7 @@ function Movie({
           <p className={styles.score}>{(movie.score * 100).toFixed(0)}</p>
         </div>
       </div>
+      <ReleaseIcon releaseType={movie.releaseType} />
       {movie.posterUrl && (
         <img
           alt={`movie poster for '${movie.title}'`}
@@ -179,9 +188,9 @@ function DirectorIcon(): React.ReactNode {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     >
       <polygon points="23 7 16 12 23 17 23 7" />
       <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
@@ -198,9 +207,9 @@ function WriterIcon(): React.ReactNode {
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     >
       <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
     </svg>
@@ -216,13 +225,45 @@ function ActorIcon(): React.ReactNode {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     >
       <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
     </svg>
   );
+}
+
+function ReleaseIcon({
+  releaseType = ReleaseType.Unknown,
+}: { releaseType?: ReleaseType } = {}): React.ReactNode {
+  switch (releaseType) {
+    case ReleaseType.DisneyPlus:
+      return <DisneyPlusIcon />;
+    case ReleaseType.Netflix:
+      return <NetflixIcon />;
+    case ReleaseType.Theatrical:
+      return <TheaterIcon />;
+    case ReleaseType.Unknown:
+    default:
+      return <UnknownIcon />;
+  }
+}
+
+function TheaterIcon(): React.ReactNode {
+  return <span>T</span>;
+}
+
+function DisneyPlusIcon(): React.ReactNode {
+  return <span>D</span>;
+}
+
+function NetflixIcon(): React.ReactNode {
+  return <span>N</span>;
+}
+
+function UnknownIcon(): React.ReactNode {
+  return <span>?</span>;
 }
 
 export default PeanutGallery;
