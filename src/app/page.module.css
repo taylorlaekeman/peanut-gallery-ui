@@ -18,7 +18,7 @@
   align-items: baseline;
   border-bottom: solid lightgrey 1px;
   display: grid;
-  grid-gap: 8px;
+  grid-gap: 4px 8px;
   grid-template-columns: max-content 80px 1fr;
   grid-template-areas:
     'score poster details'
@@ -57,9 +57,11 @@ img.moviePoster {
   border-radius: 3px;
   font-size: 0.8rem;
   grid-area: score;
+  height: 24px;
   margin: 0;
   padding: 4px 8px;
-  width: max-content;
+  text-align: center;
+  width: 32px;
 }
 
 .score.high {
@@ -111,7 +113,6 @@ img.moviePoster {
   font-size: 0.5rem;
   letter-spacing: 0.1rem;
   margin: 0;
-  margin-top: 12px;
   text-transform: uppercase;
 }
 
@@ -122,12 +123,22 @@ img.moviePoster {
 
 .iconBackground {
   align-items: center;
-  border: solid black 1px;
-  border-radius: 50%;
+  border-radius: 3px;
+  border: solid lightgrey 1px;
   display: flex;
-  height: 20px;
+  height: 24px;
   justify-content: center;
+  width: 32px;
+}
+
+.iconBackground > img {
+  height: 20px;
   width: 20px;
+}
+
+.iconBackground > svg {
+  height: 10px;
+  width: 10px;
 }
 
 .releaseIcon {
