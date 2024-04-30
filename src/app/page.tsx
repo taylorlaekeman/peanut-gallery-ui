@@ -165,7 +165,7 @@ function Movie({ movie }: { movie: Movie }): React.ReactNode {
 
 const SCORE_THRESHOLDS = {
   high: 0.7,
-  mid: 0.6,
+  mid: 0.55,
 };
 
 function DirectorIcon(): React.ReactNode {
